@@ -1,0 +1,12 @@
+model RentalOrderItem{
+    id String @id @default(uuid())
+    quantity Int
+    priceAtBooking Decimal
+    rentalOrderId String 
+    rentalOrder RentalOrder @relation(fields: [rentalOrderId],references: [id])
+    
+    gearItemId String
+gearItem   GearItem @relation(fields: [gearItemId], references: [id])
+
+    @@map("rental_orders_items")
+}

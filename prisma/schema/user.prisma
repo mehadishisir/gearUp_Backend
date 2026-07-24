@@ -6,6 +6,14 @@ model User {
     phone String
     role Role
     status UserStatus @default(ACTIVE)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    
 
+    gearItems GearItem[]
+    rentalOrder RentalOrder[]
+    reviews Review[]
+    
 
+@@map("users")
 }
