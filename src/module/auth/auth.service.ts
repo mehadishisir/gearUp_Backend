@@ -3,8 +3,9 @@ import { ILogInUser, IRegisterUser } from "./auth.interface"
 
 import bcrypt from "bcrypt"
 import config from "../../config"
-import httpStatus from "http-status"
+
 import { createToken } from "../../utils/jwt"
+
 
 
 const registerIntoDb=async(payload:IRegisterUser)=>{
@@ -76,8 +77,20 @@ config.jwt_refresh_token_secret,
 return {accessToken,refreshToken}
 };
 
+const getMe = async(userId:string)=>{
+    const user = await prisma.user.findUnique({
+        where:{
+            id:userId},
+            omit:{
+                password:true
+            }
+    })
+    return user
+}
+
 
 export const authService = {
     registerIntoDb,
-    loginUserIntoDb
+    loginUserIntoDb,
+    getMe
 }

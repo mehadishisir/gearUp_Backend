@@ -26,5 +26,15 @@ const result = await authService.loginUserIntoDb(payload)
     data: result,
   });
 })
+const getMe = catchAsync(async(req:Request,res:Response)=>{
+    const id = req.user?.id
+    const result = await authService.getMe(id as string)
+    sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User profile retrieved successfully",
+    data: result,
+  });
+})
 
-export const authController = { registerUser,logInUser };
+export const authController = { registerUser,logInUser,getMe };
