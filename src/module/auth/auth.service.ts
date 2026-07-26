@@ -1,8 +1,10 @@
 import { prisma } from "../../lib/prisma"
-import { IRegisterUser } from "./auth.interface"
+import { ILogInUser, IRegisterUser } from "./auth.interface"
 
 import bcrypt from "bcrypt"
 import config from "../../config"
+import httpStatus from "http-status"
+import { createToken } from "../../utils/jwt"
 
 
 const registerIntoDb=async(payload:IRegisterUser)=>{
@@ -37,7 +39,45 @@ const registerIntoDb=async(payload:IRegisterUser)=>{
     return createUser
    
 }
+const loginUserIntoDb=async(payload:ILogInUser)=>
+    {
+    const{email,password}=payload
+    const user = await prisma.user.findUnique({
+        where:{
+            email
+        }
+    })
+    if(!user){
+        throw new Error("Invalid email or password");
+        
+    }
+    const isPassword = await bcrypt.compare(password,user.password)
+    if(!isPassword){
+        throw new Error("Wrong Password");
+        
+    }
+    const jwtPayload = {
+        id:user.id,
+        name:user.name,
+        email: user.email,
+        role: user.role
+
+    };
+     const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_token_secret,
+    config.jwt_access_token_expiration_time as string
+  );
+    const refreshToken =  createToken(
+jwtPayload,
+config.jwt_refresh_token_secret,
+     config.jwt_refresh_token_expiration_time as string
+    )
+return {accessToken,refreshToken}
+};
+
 
 export const authService = {
-    registerIntoDb
+    registerIntoDb,
+    loginUserIntoDb
 }
