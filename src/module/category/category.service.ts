@@ -21,7 +21,7 @@ const getAllCategoriesFromDb = async () => {
   return result;
 };
 
-const updateCategoryIntoDb = async (id: string, payload: Partial<ICreateCategory>) => {
+const updateCategoryIntoDb = async (id: string, payload: ICreateCategory) => {
   const { name, description } = payload;
 
   const result = await prisma.category.update({
