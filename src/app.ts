@@ -5,6 +5,7 @@ import { prisma } from "./lib/prisma";
 import bcrypt from "bcrypt"
 import config from "./config";
 import { authRoutes } from "./module/auth/auth.route";
+import { globalErrorHandler } from "./middleware/globalErrorHandler";
 const app:Application = express()
 app.use(cors())
 app.use(express.json())
@@ -21,4 +22,8 @@ app.get('/',async (req:Request,res:Response) => {
 
 
 app.use("/api/auth",authRoutes)
+
+
+
+app.use(globalErrorHandler)
 export default app
