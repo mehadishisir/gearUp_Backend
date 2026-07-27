@@ -6,6 +6,7 @@ import bcrypt from "bcrypt"
 import config from "./config";
 import { authRoutes } from "./module/auth/auth.route";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
+import { notFound } from "./middleware/notFound";
 const app:Application = express()
 app.use(cors())
 app.use(express.json())
@@ -24,6 +25,6 @@ app.get('/',async (req:Request,res:Response) => {
 app.use("/api/auth",authRoutes)
 
 
-
+app.use(notFound)
 app.use(globalErrorHandler)
 export default app
