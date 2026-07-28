@@ -143,10 +143,84 @@ const deleteGearItemFromDb = async (id: string, providerId: string) => {
   return result;
 };
 
+
+
+const getProviderOrdersFromDb = async (providerId: string) => {
+  const result = await prisma.rentalOrder.findMany({
+    where: {
+      items: { some: { gearItem: { providerId } } },
+    },
+    include: {
+      customer: { select: { id: true, name: true, email: true, phone: true } },
+      items: {
+        where: { gearItem: { providerId } },
+        include: { gearItem: { select: { name: true, brand: true } } },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return result;
+};
+
+const updateOrderStatusIntoDb = async (providerId: string, orderId: string, status: string) => {
+  const order = await prisma.rentalOrder.findUnique({
+    where: { id: orderId },
+    include: { items: { include: { gearItem: true } } },
+  });
+
+  if (!order) {
+    const error: any = new Error("Rental order not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const isProviderOrder = order.items.some((item) => item.gearItem.providerId === providerId);
+  if (!isProviderOrder) {
+    const error: any = new Error("This order does not contain your gear");
+    error.statusCode = 403;
+    throw error;
+  }
+
+  const validTransitions: Record<string, string[]> = {
+    PLACED: ["CONFIRMED", "CANCELLED"],
+    CONFIRMED: ["CANCELLED"],
+    PAID: ["PICKED_UP"],
+    PICKED_UP: ["RETURNED"],
+  };
+
+  const allowedNext = validTransitions[order.status] || [];
+  if (!allowedNext.includes(status)) {
+    const error: any = new Error(`Cannot change status from ${order.status} to ${status}`);
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const result = await prisma.$transaction(async (tx) => {
+    if (status === "RETURNED") {
+      for (const item of order.items) {
+        await tx.gearItem.update({
+          where: { id: item.gearItemId },
+          data: { stock: { increment: item.quantity } },
+        });
+      }
+    }
+
+    return await tx.rentalOrder.update({
+      where: { id: orderId },
+      data: { status: status as any },
+    });
+  });
+
+  return result;
+};
+
 export const gearItemService = {
   createGearItemIntoDb,
   getAllGearFromDb,
   getGearByIdFromDb,
   updateGearItemIntoDb,
   deleteGearItemFromDb,
+   getProviderOrdersFromDb,
+  updateOrderStatusIntoDb,
 };

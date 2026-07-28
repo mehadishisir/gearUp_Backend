@@ -9,4 +9,7 @@ router.post("/gear", auth(Role.PROVIDER), gearItemController.createGearItem);
 router.put("/gear/:id", auth(Role.PROVIDER), gearItemController.updateGearItem);
 router.delete("/gear/:id", auth(Role.PROVIDER), gearItemController.deleteGearItem);
 
+
+router.get("/orders", auth(Role.PROVIDER), gearItemController.getProviderOrders);
+router.patch("/orders/:id", auth(Role.PROVIDER), gearItemController.updateOrderStatus);
 export const providerRoutes = router;

@@ -62,10 +62,38 @@ const deleteGearItem = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+const getProviderOrders = catchAsync(async (req: Request, res: Response) => {
+  const providerId = req.user!.id;
+  const result = await gearItemService.getProviderOrdersFromDb(providerId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Provider orders retrieved successfully",
+    data: result,
+  });
+});
+
+const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
+  const providerId = req.user!.id;
+  const { status } = req.body;
+  const result = await gearItemService.updateOrderStatusIntoDb(providerId, req.params.id, status);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Order status updated successfully",
+    data: result,
+  });
+});
+
 export const gearItemController = {
   createGearItem,
   getAllGear,
   getGearById,
   updateGearItem,
   deleteGearItem,
-};
+  getProviderOrders,
+  updateOrderStatus,
+}
