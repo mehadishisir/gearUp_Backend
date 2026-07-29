@@ -4,6 +4,8 @@ import { catchAsync } from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { gearItemService } from "./gearItem.service";
 
+import { IGearFilters } from "./gearItem.interface";
+
 const createGearItem = catchAsync(async (req: Request, res: Response) => {
   const providerId = req.user!.id;
   const result = await gearItemService.createGearItemIntoDb(req.body, providerId);
@@ -17,14 +19,15 @@ const createGearItem = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllGear = catchAsync(async (req: Request, res: Response) => {
-  const result = await gearItemService.getAllGearFromDb(req.query as any);
+  const result = await gearItemService.getAllGearFromDb(req.query as IGearFilters);
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Gear items retrieved successfully",
-    data: result,
-  });
+sendResponse(res,{
+    success:true,
+    statusCode:httpStatus.OK,
+    message:"Gear items retrieved successfully",
+    meta: result.meta,
+    data: result.data
+})
 });
 
 const getGearById = catchAsync(async (req: Request, res: Response) => {

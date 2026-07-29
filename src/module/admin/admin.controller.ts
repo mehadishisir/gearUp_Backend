@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
-import { sendResponse } from "../../utils/sendResponse";
 import {
   getAllUsersFromDb,
   updateUserStatusInDb,
   getAllGearFromDb,
   getAllRentalsFromDb,
 } from "./admin.service";
+import sendResponse from "../../utils/sendResponse";
+
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   const result = await getAllUsersFromDb();
@@ -20,7 +21,7 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
-  const result = await updateUserStatusInDb(req.params.id, req.body.status);
+  const result = await updateUserStatusInDb(req.params.id as string, req.body.status);
 
   sendResponse(res, {
     success: true,
