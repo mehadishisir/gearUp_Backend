@@ -22,42 +22,106 @@ const createGearItemIntoDb = async (payload: ICreateGearItem, providerId: string
 };
 
 const getAllGearFromDb = async (filters: IGearFilters) => {
-  const { category, minPrice, maxPrice, brand, available, search } = filters;
+  const {
+    category,
+    minPrice,
+    maxPrice,
+    brand,
+    available,
+    search,
+    page = "1",
+    limit = "10",
+    sortBy = "createdAt",
+    sortOrder = "desc",
+  } = filters;
 
-  const where:Prisma.GearItemWhereInput = {
+  const currentPage = Number(page);
+  const perPage = Number(limit);
+  const skip = (currentPage - 1) * perPage;
+
+  const where: Prisma.GearItemWhereInput = {
     ...(category && {
-      category: { name: { equals: category, mode: "insensitive" } },
+      category: {
+        name: {
+          equals: category,
+          mode: "insensitive",
+        },
+      },
     }),
+
     ...(brand && {
-      brand: { contains: brand, mode: "insensitive" },
+      brand: {
+        contains: brand,
+        mode: "insensitive",
+      },
     }),
+
     ...(available !== undefined && {
       available: available === "true",
     }),
+
     ...((minPrice || maxPrice) && {
       price: {
         ...(minPrice && { gte: Number(minPrice) }),
         ...(maxPrice && { lte: Number(maxPrice) }),
       },
     }),
+
     ...(search && {
       OR: [
-        { name: { contains: search, mode: "insensitive" } },
-        { description: { contains: search, mode: "insensitive" } },
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
       ],
     }),
   };
 
-  const result = await prisma.gearItem.findMany({
-    where,
-    include: {
-      category: { select: { name: true } },
-      provider: { select: { id: true, name: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const [data, total] = await prisma.$transaction([
+    prisma.gearItem.findMany({
+      where,
+      include: {
+        category: {
+          select: {
+            name: true,
+          },
+        },
+        provider: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      skip,
+      take: perPage,
+      orderBy: {
+        [sortBy]: sortOrder,
+      },
+    }),
 
-  return result;
+    prisma.gearItem.count({
+      where,
+    }),
+  ]);
+
+  return {
+    meta: {
+      page: currentPage,
+      limit: perPage,
+      total,
+      totalPage: Math.ceil(total / perPage),
+    },
+    data,
+  };
 };
 
 const getGearByIdFromDb = async (id: string) => {

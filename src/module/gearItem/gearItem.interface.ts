@@ -9,10 +9,16 @@ export interface ICreateGearItem {
 }
 
 export interface IGearFilters {
+  search?: string;
   category?: string;
+  brand?: string;
   minPrice?: string;
   maxPrice?: string;
-  brand?: string;
   available?: string;
-  search?: string;
+
+  page?: string;
+  limit?: string;
+
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
 }
