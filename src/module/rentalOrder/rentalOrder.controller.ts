@@ -30,7 +30,7 @@ const getMyOrders = catchAsync(async (req: Request, res: Response) => {
 
 const getOrderById = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const result = await rentalOrderService.getOrderByIdFromDb(req.params.id, userId);
+  const result = await rentalOrderService.getOrderByIdFromDb(req.params.id as string, userId);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

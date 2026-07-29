@@ -78,7 +78,7 @@ const getProviderOrders = catchAsync(async (req: Request, res: Response) => {
 const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
   const providerId = req.user!.id;
   const { status } = req.body;
-  const result = await gearItemService.updateOrderStatusIntoDb(providerId, req.params.id, status);
+  const result = await gearItemService.updateOrderStatusIntoDb(providerId, req.params.id as string, status);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

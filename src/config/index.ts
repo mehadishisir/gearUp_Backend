@@ -11,4 +11,5 @@ export default {
     jwt_refresh_token_secret : process.env.JWT_REFRESH_TOKEN_SECRET!,
     jwt_access_token_expiration_time : process.env.JWT_ACCESS_TOKEN_EXPIRATION,
     jwt_refresh_token_expiration_time : process.env.JWT_REFRESH_TOKEN_EXPIRATION,
+    stripe_secret_key: process.env.STRIPE_SECRET_KEY!,
 }

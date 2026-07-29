@@ -11,6 +11,7 @@ import { categoryRoutes } from "./module/category/category.routes";
 import { gearItemRoutes } from "./module/gearItem/gearItem.route";
 import { providerRoutes } from "./module/gearItem/provider.route";
 import { rentalOrderRoutes } from "./module/rentalOrder/rentalOrder.route";
+import { paymentRoutes } from "./module/payment/payment.route";
 const app:Application = express()
 app.use(cors())
 app.use(express.json())
@@ -31,6 +32,7 @@ app.use("/api/categories",categoryRoutes)
 app.use("/api/gear", gearItemRoutes);
 app.use("/api/provider", providerRoutes);
 app.use("/api/rentals", rentalOrderRoutes);
+app.use("/api/payments",paymentRoutes)
 
 app.use(notFound)
 app.use(globalErrorHandler)
