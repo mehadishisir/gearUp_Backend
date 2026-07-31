@@ -1,6 +1,6 @@
-import { Prisma } from "../../../prisma/generated/prisma/client";
-import { prisma } from "../../lib/prisma";
-import { ICreateGearItem, IGearFilters } from "./gearItem.interface";
+import { Prisma } from "../../../prisma/generated/prisma/client.js";
+import { prisma } from "../../lib/prisma.js";
+import { ICreateGearItem, IGearFilters } from "./gearItem.interface.js";
 
 const createGearItemIntoDb = async (payload: ICreateGearItem, providerId: string) => {
   const category = await prisma.category.findUnique({
@@ -239,7 +239,7 @@ const updateOrderStatusIntoDb = async (providerId: string, orderId: string, stat
     throw error;
   }
 
-  const isProviderOrder = order.items.some((item) => item.gearItem.providerId === providerId);
+  const isProviderOrder = order.items.some((item:any) => item.gearItem.providerId === providerId);
   if (!isProviderOrder) {
     const error: any = new Error("This order does not contain your gear");
     error.statusCode = 403;
@@ -260,7 +260,7 @@ const updateOrderStatusIntoDb = async (providerId: string, orderId: string, stat
     throw error;
   }
 
-  const result = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx:any) => {
     if (status === "RETURNED") {
       for (const item of order.items) {
         await tx.gearItem.update({

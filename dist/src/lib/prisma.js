@@ -1,7 +1,11 @@
-import { PrismaPg } from "@prisma/adapter-pg";
-import config from "../config";
-import { PrismaClient } from "../../prisma/generated/prisma/client";
-const adapter = new PrismaPg({
-    connectionString: config.database_url
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.prisma = void 0;
+const client_js_1 = require("../../prisma/generated/prisma/client.js");
+const adapter_pg_1 = require("@prisma/adapter-pg");
+const adapter = new adapter_pg_1.PrismaPg({
+    connectionString: process.env.DATABASE_URL,
 });
-export const prisma = new PrismaClient({ adapter });
+exports.prisma = new client_js_1.PrismaClient({
+    adapter,
+});

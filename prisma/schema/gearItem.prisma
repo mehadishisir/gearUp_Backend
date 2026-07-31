@@ -5,6 +5,7 @@ model GearItem{
     brand String
     price Decimal
     stock Int
+    avgRating Float @default(0)
     available Boolean @default(true)
     images String[]
     createdAt DateTime @default(now())

@@ -1,8 +1,14 @@
-import { prisma } from "../../lib/prisma";
-import { stripe } from "../../lib/stripe";
-import config from "../../config";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.paymentService = void 0;
+const prisma_1 = require("../../lib/prisma");
+const stripe_1 = require("../../lib/stripe");
+const config_1 = __importDefault(require("../../config"));
 const createPaymentSession = async (rentalOrderId, customerId) => {
-    const order = await prisma.rentalOrder.findUnique({
+    const order = await prisma_1.prisma.rentalOrder.findUnique({
         where: { id: rentalOrderId },
         include: { items: { include: { gearItem: true } } },
     });
@@ -21,13 +27,13 @@ const createPaymentSession = async (rentalOrderId, customerId) => {
         error.statusCode = 400;
         throw error;
     }
-    const existingPayment = await prisma.payment.findUnique({ where: { rentalOrderId } });
+    const existingPayment = await prisma_1.prisma.payment.findUnique({ where: { rentalOrderId } });
     if (existingPayment) {
         const error = new Error("Payment already exists for this order");
         error.statusCode = 409;
         throw error;
     }
-    const session = await stripe.checkout.sessions.create({
+    const session = await stripe_1.stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: order.items.map((item) => ({
             price_data: {
@@ -38,10 +44,10 @@ const createPaymentSession = async (rentalOrderId, customerId) => {
             quantity: item.quantity,
         })),
         mode: "payment",
-        success_url: `${config.app_url}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${config.app_url}/payment-cancel`,
+        success_url: `${config_1.default.app_url}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${config_1.default.app_url}/payment-cancel`,
     });
-    const payment = await prisma.payment.create({
+    const payment = await prisma_1.prisma.payment.create({
         data: {
             transactionId: session.id,
             rentalOrderId,
@@ -53,19 +59,19 @@ const createPaymentSession = async (rentalOrderId, customerId) => {
     return { paymentUrl: session.url, payment };
 };
 const confirmPayment = async (sessionId) => {
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const session = await stripe_1.stripe.checkout.sessions.retrieve(sessionId);
     if (session.payment_status !== "paid") {
         const error = new Error("Payment not completed yet");
         error.statusCode = 400;
         throw error;
     }
-    const payment = await prisma.payment.findUnique({ where: { transactionId: sessionId } });
+    const payment = await prisma_1.prisma.payment.findUnique({ where: { transactionId: sessionId } });
     if (!payment) {
         const error = new Error("Payment record not found");
         error.statusCode = 404;
         throw error;
     }
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma_1.prisma.$transaction(async (tx) => {
         const updatedPayment = await tx.payment.update({
             where: { id: payment.id },
             data: { status: "COMPLETED", paidAt: new Date() },
@@ -79,7 +85,7 @@ const confirmPayment = async (sessionId) => {
     return result;
 };
 const getMyPaymentsFromDb = async (customerId) => {
-    const result = await prisma.payment.findMany({
+    const result = await prisma_1.prisma.payment.findMany({
         where: { rentalOrder: { customerId } },
         include: { rentalOrder: true },
         orderBy: { createdAt: "desc" },
@@ -87,7 +93,7 @@ const getMyPaymentsFromDb = async (customerId) => {
     return result;
 };
 const getPaymentByIdFromDb = async (id, customerId) => {
-    const payment = await prisma.payment.findUnique({
+    const payment = await prisma_1.prisma.payment.findUnique({
         where: { id },
         include: { rentalOrder: true },
     });
@@ -103,7 +109,7 @@ const getPaymentByIdFromDb = async (id, customerId) => {
     }
     return payment;
 };
-export const paymentService = {
+exports.paymentService = {
     createPaymentSession,
     confirmPayment,
     getMyPaymentsFromDb,

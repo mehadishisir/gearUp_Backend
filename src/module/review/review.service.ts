@@ -42,7 +42,7 @@ const createReviewDb = async (customerId: string, payload: ICreateReview) => {
 
     await tx.gearItem.update({
       where: { id: gearItemId },
-      data: { avgRating: avg._avg.rating },
+      data: { avgRating: avg._avg.rating ?? 0 },
     });
 
     return review;

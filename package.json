@@ -4,28 +4,26 @@
   "description": "",
   "license": "ISC",
   "author": "",
-  "type": "module",
-  "main": "index.js",
+  "main": "dist/src/server.js",
   "scripts": {
-  "dev": "tsx watch src/server.ts",
-  "build": "prisma generate --schema=prisma/schema && tsc",
-  "vercel-build": "prisma generate --schema=prisma/schema"
-},
+    "dev": "tsx watch src/server.ts",
+    "build": "prisma generate && tsc",
+    "start": "node dist/src/server.js",
+    "vercel-build": "prisma generate && tsc"
+  },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
-    "@types/better-sqlite3": "^7.6.13",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.1.2",
     "@types/pg": "^8.20.0",
     "prisma": "^7.9.0",
     "tsx": "^4.23.1",
-    "typescript": "^7.0.2"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@prisma/adapter-better-sqlite3": "^7.9.0",
-    "@prisma/adapter-pg": "^7.9.0",
+    "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",

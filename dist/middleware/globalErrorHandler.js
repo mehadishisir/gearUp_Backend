@@ -1,4 +1,7 @@
-export const globalErrorHandler = (err, req, res, next) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.globalErrorHandler = void 0;
+const globalErrorHandler = (err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     res.status(statusCode).json({
         success: false,
@@ -6,3 +9,4 @@ export const globalErrorHandler = (err, req, res, next) => {
         errorDetails: null,
     });
 };
+exports.globalErrorHandler = globalErrorHandler;

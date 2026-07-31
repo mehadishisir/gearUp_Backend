@@ -1,25 +1,28 @@
-import { OrderStatus } from "../../../prisma/generated/prisma/enums";
-import { prisma } from "../../lib/prisma";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getReviewsByGearItemDb = exports.createReviewDb = void 0;
+const enums_1 = require("../../../prisma/generated/prisma/enums");
+const prisma_1 = require("../../lib/prisma");
 const createReviewDb = async (customerId, payload) => {
     const { gearItemId, rentalOrderId, rating, comment } = payload;
     if (!rating || rating < 1 || rating > 5) {
         throw new Error("Rating must be between 1 and 5!");
     }
-    const order = await prisma.rentalOrder.findUniqueOrThrow({
+    const order = await prisma_1.prisma.rentalOrder.findUniqueOrThrow({
         where: { id: rentalOrderId },
         include: { items: true },
     });
     if (order.customerId !== customerId) {
         throw new Error("This is not your rental order!");
     }
-    if (order.status !== OrderStatus.RETURNED) {
+    if (order.status !== enums_1.OrderStatus.RETURNED) {
         throw new Error("You can review only after returning the gear!");
     }
     const isItemInOrder = order.items.some((orderItem) => orderItem.gearItemId === gearItemId);
     if (!isItemInOrder) {
         throw new Error("This gear is not in your rental order!");
     }
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma_1.prisma.$transaction(async (tx) => {
         const review = await tx.review.create({
             data: { customerId, gearItemId, rentalOrderId, rating, comment },
         });
@@ -36,12 +39,13 @@ const createReviewDb = async (customerId, payload) => {
     });
     return result;
 };
+exports.createReviewDb = createReviewDb;
 const getReviewsByGearItemDb = async (gearItemId) => {
-    const result = await prisma.review.findMany({
+    const result = await prisma_1.prisma.review.findMany({
         where: { gearItemId },
         include: { customer: { select: { id: true, name: true } } },
         orderBy: { createdAt: "desc" },
     });
     return result;
 };
-export { createReviewDb, getReviewsByGearItemDb };
+exports.getReviewsByGearItemDb = getReviewsByGearItemDb;

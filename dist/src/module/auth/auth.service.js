@@ -1,17 +1,23 @@
-import { prisma } from "../../lib/prisma";
-import bcrypt from "bcrypt";
-import config from "../../config";
-import { createToken } from "../../utils/jwt";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authService = void 0;
+const prisma_1 = require("../../lib/prisma");
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const config_1 = __importDefault(require("../../config"));
+const jwt_1 = require("../../utils/jwt");
 const registerIntoDb = async (payload) => {
     const { name, email, password, role, phone } = payload;
-    const isUserExist = await prisma.user.findUnique({ where: { email } });
+    const isUserExist = await prisma_1.prisma.user.findUnique({ where: { email } });
     if (isUserExist) {
         const error = new Error("User already exists");
         error.statusCode = 409;
         throw error;
     }
-    const hashPassword = await bcrypt.hash(password, Number(config.bycrypt_salt_rounds));
-    const createUser = await prisma.user.create({
+    const hashPassword = await bcrypt_1.default.hash(password, Number(config_1.default.bycrypt_salt_rounds));
+    const createUser = await prisma_1.prisma.user.create({
         data: { name, email, password: hashPassword, role, phone },
         omit: { password: true },
     });
@@ -19,13 +25,13 @@ const registerIntoDb = async (payload) => {
 };
 const loginUserIntoDb = async (payload) => {
     const { email, password } = payload;
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma_1.prisma.user.findUnique({ where: { email } });
     if (!user) {
         const error = new Error("Invalid email or password");
         error.statusCode = 401;
         throw error;
     }
-    const isPassword = await bcrypt.compare(password, user.password);
+    const isPassword = await bcrypt_1.default.compare(password, user.password);
     if (!isPassword) {
         const error = new Error("Invalid email or password");
         error.statusCode = 401;
@@ -37,12 +43,12 @@ const loginUserIntoDb = async (payload) => {
         email: user.email,
         role: user.role,
     };
-    const accessToken = createToken(jwtPayload, config.jwt_access_token_secret, config.jwt_access_token_expiration_time);
-    const refreshToken = createToken(jwtPayload, config.jwt_refresh_token_secret, config.jwt_refresh_token_expiration_time);
+    const accessToken = (0, jwt_1.createToken)(jwtPayload, config_1.default.jwt_access_token_secret, config_1.default.jwt_access_token_expiration_time);
+    const refreshToken = (0, jwt_1.createToken)(jwtPayload, config_1.default.jwt_refresh_token_secret, config_1.default.jwt_refresh_token_expiration_time);
     return { accessToken, refreshToken };
 };
 const getMe = async (userId) => {
-    const user = await prisma.user.findUnique({
+    const user = await prisma_1.prisma.user.findUnique({
         where: { id: userId },
         omit: { password: true },
     });
@@ -53,7 +59,7 @@ const getMe = async (userId) => {
     }
     return user;
 };
-export const authService = {
+exports.authService = {
     registerIntoDb,
     loginUserIntoDb,
     getMe,

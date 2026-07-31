@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { catchAsync } from "../../utils/catchAsync";
+import { catchAsync } from "../../utils/catchAsync.js";
 import {
   getAllUsersFromDb,
   updateUserStatusInDb,
   getAllGearFromDb,
   getAllRentalsFromDb,
-} from "./admin.service";
-import sendResponse from "../../utils/sendResponse";
+} from "./admin.service.js";
+import sendResponse from "../../utils/sendResponse.js";
 
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {

@@ -1,4 +1,7 @@
-import { prisma } from "../../lib/prisma";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.rentalOrderService = void 0;
+const prisma_1 = require("../../lib/prisma");
 const createRentalOrderIntoDb = async (payload, customerId) => {
     const { startDate, endDate, items } = payload;
     if (!items || items.length === 0) {
@@ -15,7 +18,7 @@ const createRentalOrderIntoDb = async (payload, customerId) => {
     }
     const rentalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
     const gearItems = await Promise.all(items.map(async (item) => {
-        const gear = await prisma.gearItem.findUnique({ where: { id: item.gearItemId } });
+        const gear = await prisma_1.prisma.gearItem.findUnique({ where: { id: item.gearItemId } });
         if (!gear) {
             const error = new Error(`Gear item not found: ${item.gearItemId}`);
             error.statusCode = 404;
@@ -32,7 +35,7 @@ const createRentalOrderIntoDb = async (payload, customerId) => {
     gearItems.forEach(({ gear, quantity }) => {
         totalAmount += Number(gear.price) * quantity * rentalDays;
     });
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma_1.prisma.$transaction(async (tx) => {
         const order = await tx.rentalOrder.create({
             data: {
                 customerId,
@@ -61,7 +64,7 @@ const createRentalOrderIntoDb = async (payload, customerId) => {
     return result;
 };
 const getMyOrdersFromDb = async (customerId) => {
-    const result = await prisma.rentalOrder.findMany({
+    const result = await prisma_1.prisma.rentalOrder.findMany({
         where: { customerId },
         include: {
             items: { include: { gearItem: { select: { name: true, images: true } } } },
@@ -72,7 +75,7 @@ const getMyOrdersFromDb = async (customerId) => {
     return result;
 };
 const getOrderByIdFromDb = async (id, userId) => {
-    const order = await prisma.rentalOrder.findUnique({
+    const order = await prisma_1.prisma.rentalOrder.findUnique({
         where: { id },
         include: {
             items: { include: { gearItem: true } },
@@ -92,7 +95,7 @@ const getOrderByIdFromDb = async (id, userId) => {
     }
     return order;
 };
-export const rentalOrderService = {
+exports.rentalOrderService = {
     createRentalOrderIntoDb,
     getMyOrdersFromDb,
     getOrderByIdFromDb,

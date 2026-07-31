@@ -1,6 +1,9 @@
-import { prisma } from "../../lib/prisma";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.gearItemService = void 0;
+const prisma_js_1 = require("../../lib/prisma.js");
 const createGearItemIntoDb = async (payload, providerId) => {
-    const category = await prisma.category.findUnique({
+    const category = await prisma_js_1.prisma.category.findUnique({
         where: { id: payload.categoryId },
     });
     if (!category) {
@@ -8,7 +11,7 @@ const createGearItemIntoDb = async (payload, providerId) => {
         error.statusCode = 404;
         throw error;
     }
-    const result = await prisma.gearItem.create({
+    const result = await prisma_js_1.prisma.gearItem.create({
         data: { ...payload, providerId },
         include: { category: { select: { name: true } } },
     });
@@ -60,8 +63,8 @@ const getAllGearFromDb = async (filters) => {
             ],
         }),
     };
-    const [data, total] = await prisma.$transaction([
-        prisma.gearItem.findMany({
+    const [data, total] = await prisma_js_1.prisma.$transaction([
+        prisma_js_1.prisma.gearItem.findMany({
             where,
             include: {
                 category: {
@@ -82,7 +85,7 @@ const getAllGearFromDb = async (filters) => {
                 [sortBy]: sortOrder,
             },
         }),
-        prisma.gearItem.count({
+        prisma_js_1.prisma.gearItem.count({
             where,
         }),
     ]);
@@ -97,7 +100,7 @@ const getAllGearFromDb = async (filters) => {
     };
 };
 const getGearByIdFromDb = async (id) => {
-    const result = await prisma.gearItem.findUnique({
+    const result = await prisma_js_1.prisma.gearItem.findUnique({
         where: { id },
         include: {
             category: { select: { name: true } },
@@ -120,7 +123,7 @@ const getGearByIdFromDb = async (id) => {
     return result;
 };
 const updateGearItemIntoDb = async (id, payload, providerId) => {
-    const gear = await prisma.gearItem.findUnique({ where: { id } });
+    const gear = await prisma_js_1.prisma.gearItem.findUnique({ where: { id } });
     if (!gear) {
         const error = new Error("Gear item not found");
         error.statusCode = 404;
@@ -131,7 +134,7 @@ const updateGearItemIntoDb = async (id, payload, providerId) => {
         error.statusCode = 403;
         throw error;
     }
-    const result = await prisma.gearItem.update({
+    const result = await prisma_js_1.prisma.gearItem.update({
         where: { id },
         data: payload,
         include: { category: { select: { name: true } } },
@@ -139,7 +142,7 @@ const updateGearItemIntoDb = async (id, payload, providerId) => {
     return result;
 };
 const deleteGearItemFromDb = async (id, providerId) => {
-    const gear = await prisma.gearItem.findUnique({ where: { id } });
+    const gear = await prisma_js_1.prisma.gearItem.findUnique({ where: { id } });
     if (!gear) {
         const error = new Error("Gear item not found");
         error.statusCode = 404;
@@ -150,19 +153,19 @@ const deleteGearItemFromDb = async (id, providerId) => {
         error.statusCode = 403;
         throw error;
     }
-    const orderCount = await prisma.rentalOrderItem.count({ where: { gearItemId: id } });
+    const orderCount = await prisma_js_1.prisma.rentalOrderItem.count({ where: { gearItemId: id } });
     if (orderCount > 0) {
-        const result = await prisma.gearItem.update({
+        const result = await prisma_js_1.prisma.gearItem.update({
             where: { id },
             data: { available: false, stock: 0 },
         });
         return result;
     }
-    const result = await prisma.gearItem.delete({ where: { id } });
+    const result = await prisma_js_1.prisma.gearItem.delete({ where: { id } });
     return result;
 };
 const getProviderOrdersFromDb = async (providerId) => {
-    const result = await prisma.rentalOrder.findMany({
+    const result = await prisma_js_1.prisma.rentalOrder.findMany({
         where: {
             items: { some: { gearItem: { providerId } } },
         },
@@ -178,7 +181,7 @@ const getProviderOrdersFromDb = async (providerId) => {
     return result;
 };
 const updateOrderStatusIntoDb = async (providerId, orderId, status) => {
-    const order = await prisma.rentalOrder.findUnique({
+    const order = await prisma_js_1.prisma.rentalOrder.findUnique({
         where: { id: orderId },
         include: { items: { include: { gearItem: true } } },
     });
@@ -205,7 +208,7 @@ const updateOrderStatusIntoDb = async (providerId, orderId, status) => {
         error.statusCode = 400;
         throw error;
     }
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma_js_1.prisma.$transaction(async (tx) => {
         if (status === "RETURNED") {
             for (const item of order.items) {
                 await tx.gearItem.update({
@@ -221,7 +224,7 @@ const updateOrderStatusIntoDb = async (providerId, orderId, status) => {
     });
     return result;
 };
-export const gearItemService = {
+exports.gearItemService = {
     createGearItemIntoDb,
     getAllGearFromDb,
     getGearByIdFromDb,

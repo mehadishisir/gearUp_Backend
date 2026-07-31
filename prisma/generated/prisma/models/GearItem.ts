@@ -29,11 +29,13 @@ export type AggregateGearItem = {
 export type GearItemAvgAggregateOutputType = {
   price: runtime.Decimal | null
   stock: number | null
+  avgRating: number | null
 }
 
 export type GearItemSumAggregateOutputType = {
   price: runtime.Decimal | null
   stock: number | null
+  avgRating: number | null
 }
 
 export type GearItemMinAggregateOutputType = {
@@ -43,6 +45,7 @@ export type GearItemMinAggregateOutputType = {
   brand: string | null
   price: runtime.Decimal | null
   stock: number | null
+  avgRating: number | null
   available: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -57,6 +60,7 @@ export type GearItemMaxAggregateOutputType = {
   brand: string | null
   price: runtime.Decimal | null
   stock: number | null
+  avgRating: number | null
   available: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -71,6 +75,7 @@ export type GearItemCountAggregateOutputType = {
   brand: number
   price: number
   stock: number
+  avgRating: number
   available: number
   images: number
   createdAt: number
@@ -84,11 +89,13 @@ export type GearItemCountAggregateOutputType = {
 export type GearItemAvgAggregateInputType = {
   price?: true
   stock?: true
+  avgRating?: true
 }
 
 export type GearItemSumAggregateInputType = {
   price?: true
   stock?: true
+  avgRating?: true
 }
 
 export type GearItemMinAggregateInputType = {
@@ -98,6 +105,7 @@ export type GearItemMinAggregateInputType = {
   brand?: true
   price?: true
   stock?: true
+  avgRating?: true
   available?: true
   createdAt?: true
   updatedAt?: true
@@ -112,6 +120,7 @@ export type GearItemMaxAggregateInputType = {
   brand?: true
   price?: true
   stock?: true
+  avgRating?: true
   available?: true
   createdAt?: true
   updatedAt?: true
@@ -126,6 +135,7 @@ export type GearItemCountAggregateInputType = {
   brand?: true
   price?: true
   stock?: true
+  avgRating?: true
   available?: true
   images?: true
   createdAt?: true
@@ -228,6 +238,7 @@ export type GearItemGroupByOutputType = {
   brand: string
   price: runtime.Decimal
   stock: number
+  avgRating: number
   available: boolean
   images: string[]
   createdAt: Date
@@ -266,6 +277,7 @@ export type GearItemWhereInput = {
   brand?: Prisma.StringFilter<"GearItem"> | string
   price?: Prisma.DecimalFilter<"GearItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFilter<"GearItem"> | number
+  avgRating?: Prisma.FloatFilter<"GearItem"> | number
   available?: Prisma.BoolFilter<"GearItem"> | boolean
   images?: Prisma.StringNullableListFilter<"GearItem">
   createdAt?: Prisma.DateTimeFilter<"GearItem"> | Date | string
@@ -285,6 +297,7 @@ export type GearItemOrderByWithRelationInput = {
   brand?: Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
   available?: Prisma.SortOrder
   images?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -307,6 +320,7 @@ export type GearItemWhereUniqueInput = Prisma.AtLeast<{
   brand?: Prisma.StringFilter<"GearItem"> | string
   price?: Prisma.DecimalFilter<"GearItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFilter<"GearItem"> | number
+  avgRating?: Prisma.FloatFilter<"GearItem"> | number
   available?: Prisma.BoolFilter<"GearItem"> | boolean
   images?: Prisma.StringNullableListFilter<"GearItem">
   createdAt?: Prisma.DateTimeFilter<"GearItem"> | Date | string
@@ -326,6 +340,7 @@ export type GearItemOrderByWithAggregationInput = {
   brand?: Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
   available?: Prisma.SortOrder
   images?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -349,6 +364,7 @@ export type GearItemScalarWhereWithAggregatesInput = {
   brand?: Prisma.StringWithAggregatesFilter<"GearItem"> | string
   price?: Prisma.DecimalWithAggregatesFilter<"GearItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntWithAggregatesFilter<"GearItem"> | number
+  avgRating?: Prisma.FloatWithAggregatesFilter<"GearItem"> | number
   available?: Prisma.BoolWithAggregatesFilter<"GearItem"> | boolean
   images?: Prisma.StringNullableListFilter<"GearItem">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GearItem"> | Date | string
@@ -364,6 +380,7 @@ export type GearItemCreateInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -381,6 +398,7 @@ export type GearItemUncheckedCreateInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -398,6 +416,7 @@ export type GearItemUpdateInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -415,6 +434,7 @@ export type GearItemUncheckedUpdateInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -432,6 +452,7 @@ export type GearItemCreateManyInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -447,6 +468,7 @@ export type GearItemUpdateManyMutationInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -460,6 +482,7 @@ export type GearItemUncheckedUpdateManyInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -498,6 +521,7 @@ export type GearItemCountOrderByAggregateInput = {
   brand?: Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
   available?: Prisma.SortOrder
   images?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -509,6 +533,7 @@ export type GearItemCountOrderByAggregateInput = {
 export type GearItemAvgOrderByAggregateInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
 }
 
 export type GearItemMaxOrderByAggregateInput = {
@@ -518,6 +543,7 @@ export type GearItemMaxOrderByAggregateInput = {
   brand?: Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
   available?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -532,6 +558,7 @@ export type GearItemMinOrderByAggregateInput = {
   brand?: Prisma.SortOrder
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
   available?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -542,6 +569,7 @@ export type GearItemMinOrderByAggregateInput = {
 export type GearItemSumOrderByAggregateInput = {
   price?: Prisma.SortOrder
   stock?: Prisma.SortOrder
+  avgRating?: Prisma.SortOrder
 }
 
 export type GearItemCreateNestedOneWithoutOrderItemsInput = {
@@ -602,6 +630,14 @@ export type GearItemUncheckedUpdateManyWithoutCategoryNestedInput = {
 
 export type GearItemCreateimagesInput = {
   set: string[]
+}
+
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -676,6 +712,7 @@ export type GearItemCreateWithoutOrderItemsInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -692,6 +729,7 @@ export type GearItemUncheckedCreateWithoutOrderItemsInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -724,6 +762,7 @@ export type GearItemUpdateWithoutOrderItemsInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -740,6 +779,7 @@ export type GearItemUncheckedUpdateWithoutOrderItemsInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -756,6 +796,7 @@ export type GearItemCreateWithoutCategoryInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -772,6 +813,7 @@ export type GearItemUncheckedCreateWithoutCategoryInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -817,6 +859,7 @@ export type GearItemScalarWhereInput = {
   brand?: Prisma.StringFilter<"GearItem"> | string
   price?: Prisma.DecimalFilter<"GearItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFilter<"GearItem"> | number
+  avgRating?: Prisma.FloatFilter<"GearItem"> | number
   available?: Prisma.BoolFilter<"GearItem"> | boolean
   images?: Prisma.StringNullableListFilter<"GearItem">
   createdAt?: Prisma.DateTimeFilter<"GearItem"> | Date | string
@@ -832,6 +875,7 @@ export type GearItemCreateWithoutReviewsInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -848,6 +892,7 @@ export type GearItemUncheckedCreateWithoutReviewsInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -880,6 +925,7 @@ export type GearItemUpdateWithoutReviewsInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -896,6 +942,7 @@ export type GearItemUncheckedUpdateWithoutReviewsInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -912,6 +959,7 @@ export type GearItemCreateWithoutProviderInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -928,6 +976,7 @@ export type GearItemUncheckedCreateWithoutProviderInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -970,6 +1019,7 @@ export type GearItemCreateManyCategoryInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -984,6 +1034,7 @@ export type GearItemUpdateWithoutCategoryInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1000,6 +1051,7 @@ export type GearItemUncheckedUpdateWithoutCategoryInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1016,6 +1068,7 @@ export type GearItemUncheckedUpdateManyWithoutCategoryInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1030,6 +1083,7 @@ export type GearItemCreateManyProviderInput = {
   brand: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   stock: number
+  avgRating?: number
   available?: boolean
   images?: Prisma.GearItemCreateimagesInput | string[]
   createdAt?: Date | string
@@ -1044,6 +1098,7 @@ export type GearItemUpdateWithoutProviderInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1060,6 +1115,7 @@ export type GearItemUncheckedUpdateWithoutProviderInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1076,6 +1132,7 @@ export type GearItemUncheckedUpdateManyWithoutProviderInput = {
   brand?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   stock?: Prisma.IntFieldUpdateOperationsInput | number
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   available?: Prisma.BoolFieldUpdateOperationsInput | boolean
   images?: Prisma.GearItemUpdateimagesInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1130,6 +1187,7 @@ export type GearItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   brand?: boolean
   price?: boolean
   stock?: boolean
+  avgRating?: boolean
   available?: boolean
   images?: boolean
   createdAt?: boolean
@@ -1150,6 +1208,7 @@ export type GearItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   brand?: boolean
   price?: boolean
   stock?: boolean
+  avgRating?: boolean
   available?: boolean
   images?: boolean
   createdAt?: boolean
@@ -1167,6 +1226,7 @@ export type GearItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   brand?: boolean
   price?: boolean
   stock?: boolean
+  avgRating?: boolean
   available?: boolean
   images?: boolean
   createdAt?: boolean
@@ -1184,6 +1244,7 @@ export type GearItemSelectScalar = {
   brand?: boolean
   price?: boolean
   stock?: boolean
+  avgRating?: boolean
   available?: boolean
   images?: boolean
   createdAt?: boolean
@@ -1192,7 +1253,7 @@ export type GearItemSelectScalar = {
   categoryId?: boolean
 }
 
-export type GearItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "brand" | "price" | "stock" | "available" | "images" | "createdAt" | "updatedAt" | "providerId" | "categoryId", ExtArgs["result"]["gearItem"]>
+export type GearItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "brand" | "price" | "stock" | "avgRating" | "available" | "images" | "createdAt" | "updatedAt" | "providerId" | "categoryId", ExtArgs["result"]["gearItem"]>
 export type GearItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   provider?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -1224,6 +1285,7 @@ export type $GearItemPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     brand: string
     price: runtime.Decimal
     stock: number
+    avgRating: number
     available: boolean
     images: string[]
     createdAt: Date
@@ -1663,6 +1725,7 @@ export interface GearItemFieldRefs {
   readonly brand: Prisma.FieldRef<"GearItem", 'String'>
   readonly price: Prisma.FieldRef<"GearItem", 'Decimal'>
   readonly stock: Prisma.FieldRef<"GearItem", 'Int'>
+  readonly avgRating: Prisma.FieldRef<"GearItem", 'Float'>
   readonly available: Prisma.FieldRef<"GearItem", 'Boolean'>
   readonly images: Prisma.FieldRef<"GearItem", 'String[]'>
   readonly createdAt: Prisma.FieldRef<"GearItem", 'DateTime'>
