@@ -1,7 +1,8 @@
+console.log("APP LOADED");
+
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
-import httpStatus from "http-status";
-import { prisma } from "./lib/prisma.js";
+
 
 import { authRoutes } from "./module/auth/auth.route.js";
 import { categoryRoutes } from "./module/category/category.routes.js";
