@@ -4,6 +4,7 @@
     "module": "commonjs",
     "outDir": "./dist",
     "strict": true,
+    "types": ["node"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true

@@ -23,10 +23,8 @@ app.use(cors({
 }) as any);
 app.use(express.json());
 
-app.get("/", async (req: Request, res: Response) => {
-  await prisma.user.findMany();
-
-  return res.status(httpStatus.OK).json({
+app.get("/", (req, res) => {
+  return res.json({
     success: true,
     message: "GearUp server is running",
   });
