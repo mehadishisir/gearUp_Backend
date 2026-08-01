@@ -60,7 +60,9 @@ const loginUserIntoDb = async (payload: ILogInUser) => {
     config.jwt_refresh_token_expiration_time as string
   );
 
-  return { accessToken, refreshToken };
+  const { password: _password, ...userWithoutPassword } = user;
+
+  return { user: userWithoutPassword, accessToken, refreshToken };
 };
 
 const getMe = async (userId: string) => {
