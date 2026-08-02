@@ -12,7 +12,7 @@ const cookieOptions = {
     process.env.NODE_ENV === "production"
       ? ("none" as const)
       : ("lax" as const),
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 din
+  maxAge: 7 * 24 * 60 * 60 * 1000, 
 };
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
