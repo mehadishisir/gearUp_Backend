@@ -7,10 +7,9 @@ import sendResponse from "../../utils/sendResponse";
 
 const cookieOptions = {
   httpOnly: true,
-  secure: true, 
-  sameSite:true,
-    
-  maxAge: 7 * 24 * 60 * 60 * 1000, 
+  secure: true,
+  sameSite: "none" as const,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
