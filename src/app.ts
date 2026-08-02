@@ -15,6 +15,7 @@ import { adminRoutes } from "./module/admin/admin.route.js";
 
 import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
 import { notFound } from "./middleware/notFound.js";
+import cookieParser from "cookie-parser";
 
 const app: Application = express();
 
@@ -23,6 +24,7 @@ app.use(cors({
   credentials: true,
 }) as any);
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   return res.json({

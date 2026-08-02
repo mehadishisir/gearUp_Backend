@@ -17,9 +17,11 @@ declare global {
 
 export const auth = (...roles: Role[]) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization?.startsWith("Bearer")
+    const headerToken = req.headers.authorization?.startsWith("Bearer")
       ? req.headers.authorization.split(" ")[1]
       : undefined;
+
+    const token = headerToken ?? req.cookies?.accessToken;
 
     if (!token) {
       const error: any = new Error("Please login first");
