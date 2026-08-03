@@ -85,33 +85,31 @@ const getAllGearFromDb = async (filters: IGearFilters) => {
     }),
   };
 
-  const [data, total] = await prisma.$transaction([
-    prisma.gearItem.findMany({
-      where,
-      include: {
-        category: {
-          select: {
-            name: true,
-          },
-        },
-        provider: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
+  const data = await prisma.gearItem.findMany({
+  where,
+  include: {
+    category: {
+      select: {
+        name: true,
       },
-      skip,
-      take: perPage,
-      orderBy: {
-        [sortBy]: sortOrder,
+    },
+    provider: {
+      select: {
+        id: true,
+        name: true,
       },
-    }),
+    },
+  },
+  skip,
+  take: perPage,
+  orderBy: {
+    [sortBy]: sortOrder,
+  },
+});
 
-    prisma.gearItem.count({
-      where,
-    }),
-  ]);
+const total = await prisma.gearItem.count({
+  where,
+});
 
   return {
     meta: {
