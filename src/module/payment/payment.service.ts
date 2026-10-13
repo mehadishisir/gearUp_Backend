@@ -26,11 +26,34 @@ const createPaymentSession = async (rentalOrderId: string, customerId: string) =
     throw error;
   }
 
-  const existingPayment = await prisma.payment.findUnique({ where: { rentalOrderId } });
+  const existingPayment = await prisma.payment.findUnique({
+    where: { rentalOrderId },
+  });
+
   if (existingPayment) {
-    const error: any = new Error("Payment already exists for this order");
-    error.statusCode = 409;
-    throw error;
+    // Already paid → block
+    if (existingPayment.status === "COMPLETED") {
+      const error: any = new Error("This order has already been paid");
+      error.statusCode = 409;
+      throw error;
+    }
+
+    // PENDING → try to reuse the existing Stripe session
+    if (existingPayment.status === "PENDING" && existingPayment.transactionId) {
+      try {
+        const existingSession = await stripe.checkout.sessions.retrieve(
+          existingPayment.transactionId
+        );
+        if (existingSession.status === "open" && existingSession.url) {
+          return { paymentUrl: existingSession.url, payment: existingPayment };
+        }
+      } catch {
+        // Session expired or invalid → fall through
+      }
+    }
+
+    // Stale PENDING → delete and create fresh
+    await prisma.payment.delete({ where: { id: existingPayment.id } });
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -70,7 +93,9 @@ const confirmPayment = async (sessionId: string) => {
     throw error;
   }
 
-  const payment = await prisma.payment.findUnique({ where: { transactionId: sessionId } });
+  const payment = await prisma.payment.findUnique({
+    where: { transactionId: sessionId },
+  });
 
   if (!payment) {
     const error: any = new Error("Payment record not found");
